@@ -32,6 +32,18 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <!-- Tombol Layar Hitam (Hemat Baterai / Anti-Sleep) -->
+        <ImageView
+            android:id="@+id/btnBlackScreen"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Mode Layar Hitam Hemat Baterai"
+            android:padding="5dp"
+            app:srcCompat="@drawable/ic_flash_off"
+            app:tint="@color/warning" />
+
         <!-- FPS Counter Badge -->
         <TextView
             android:id="@+id/tvFps"
@@ -209,7 +221,7 @@
                         android:id="@+id/tvUrlLabel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Web Dashboard &amp; Stream URL"
+                        android:text="Web Dashboard &amp; Stream URL (Ketuk untuk daftar IP)"
                         android:textColor="@color/text_tertiary"
                         android:textSize="11sp" />
 
@@ -303,5 +315,31 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <!-- Black Screen Saver Overlay (Hemat Baterai & Anti Layar Mati) -->
+    <FrameLayout
+        android:id="@+id/blackScreenOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alpha="0.25"
+            android:gravity="center"
+            android:padding="24dp"
+            android:text="Mode Layar Hitam Aktif\nStreaming Tetap Berjalan\n\n(Ketuk layar untuk kembali)"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
