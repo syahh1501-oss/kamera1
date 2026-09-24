@@ -20,9 +20,21 @@ import java.util.concurrent.atomic.AtomicReference
 
 class CameraStreamManager(
     private val context: Context,
-    private val lifecycleOwner: LifecycleOwner
+    private val lifecycleOwner: LifecycleOwner? = null
 ) {
     private val TAG = "CameraStreamManager"
+
+    // Persistent LifecycleOwner agar CameraX TIDAK dihentikan saat layar dimatikan atau activity berhenti
+    private val persistentLifecycleOwner = object : LifecycleOwner {
+        private val registry = androidx.lifecycle.LifecycleRegistry(this).apply {
+            currentState = androidx.lifecycle.Lifecycle.State.RESUMED
+        }
+        override val lifecycle: androidx.lifecycle.Lifecycle get() = registry
+
+        fun stop() {
+            registry.currentState = androidx.lifecycle.Lifecycle.State.DESTROYED
+        }
+    }
 
     private var cameraProvider: ProcessCameraProvider? = null
     private var cameraControl: CameraControl? = null
@@ -98,10 +110,11 @@ class CameraStreamManager(
         }
 
         try {
+            val owner = persistentLifecycleOwner
             val camera = if (previewView != null) {
-                provider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageAnalysis)
+                provider.bindToLifecycle(owner, cameraSelector, preview, imageAnalysis)
             } else {
-                provider.bindToLifecycle(lifecycleOwner, cameraSelector, imageAnalysis)
+                provider.bindToLifecycle(owner, cameraSelector, imageAnalysis)
             }
             cameraControl = camera.cameraControl
             cameraInfo = camera.cameraInfo
@@ -217,6 +230,7 @@ class CameraStreamManager(
     }
 
     fun stop() {
+        persistentLifecycleOwner.stop()
         cameraProvider?.unbindAll()
         cameraExecutor.shutdown()
         frameListeners.clear()

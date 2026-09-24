@@ -71,13 +71,14 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        cameraManager = CameraStreamManager(this, this)
+        cameraManager = CameraStreamManager(this)
         audioStreamer = AudioStreamer()
 
         setupListeners()
         setupBlackScreenMode()
         checkPermissionsAndStart()
         checkOverlayPermission()
+        checkBatteryOptimization()
     }
 
     private fun checkPermissionsAndStart() {
@@ -122,6 +123,37 @@ class MainActivity : AppCompatActivity() {
                 }
                 .setNegativeButton("Nanti Saja", null)
                 .show()
+        }
+    }
+
+    /**
+     * Meminta pengecualian Optimasi Baterai agar socket jaringan & CPU tidak di-freeze oleh sistem Android saat layar mati.
+     */
+    private fun checkBatteryOptimization() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val pm = getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                AlertDialog.Builder(this)
+                    .setTitle("Izin Hemat Daya (Penting)")
+                    .setMessage("Agar streaming video dan data tidak membeku (freeze) saat tombol power ditekan, silakan pilih 'Tidak Dibatasi / Unrestricted' untuk aplikasi ini.")
+                    .setPositiveButton("Buka Pengaturan") { _, _ ->
+                        try {
+                            val intent = Intent(
+                                Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                                Uri.parse("package:$packageName")
+                            )
+                            startActivity(intent)
+                        } catch (e: Exception) {
+                            try {
+                                startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+                            } catch (e2: Exception) {
+                                e2.printStackTrace()
+                            }
+                        }
+                    }
+                    .setNegativeButton("Nanti Saja", null)
+                    .show()
+            }
         }
     }
 
