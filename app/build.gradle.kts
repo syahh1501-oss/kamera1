@@ -7,17 +7,32 @@ android {
     namespace = "com.example.ipwebcam"
     compileSdk = 34
 
+    val vCode = (project.findProperty("versionCode") as? String)?.toIntOrNull() ?: 1
+    val vName = (project.findProperty("versionName") as? String) ?: "1.0.0"
+
     defaultConfig {
         applicationId = "com.example.ipwebcam"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = vCode
+        versionName = vName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
