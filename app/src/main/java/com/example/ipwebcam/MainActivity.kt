@@ -4,10 +4,13 @@ import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
@@ -55,12 +58,26 @@ class MainActivity : AppCompatActivity() {
         // Jaga layar tetap menyala selama aplikasi dibuka agar stream tidak terhenti
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        // Izinkan kamera tetap aktif di lockscreen / saat tombol power ditekan
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            setShowWhenLocked(true)
+            setTurnScreenOn(true)
+        } else {
+            @Suppress("DEPRECATION")
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+            )
+        }
+
         cameraManager = CameraStreamManager(this, this)
         audioStreamer = AudioStreamer()
 
         setupListeners()
         setupBlackScreenMode()
         checkPermissionsAndStart()
+        checkOverlayPermission()
     }
 
     private fun checkPermissionsAndStart() {
@@ -80,6 +97,31 @@ class MainActivity : AppCompatActivity() {
             initCamera()
         } else {
             permissionLauncher.launch(notGranted.toTypedArray())
+        }
+    }
+
+    /**
+     * Meminta izin 'Tampilkan di Atas Aplikasi Lain' (SYSTEM_ALERT_WINDOW)
+     * agar kamera tetap aktif saat tombol power ditekan / layar mati atau saat membuka aplikasi lain.
+     */
+    private fun checkOverlayPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            AlertDialog.Builder(this)
+                .setTitle("Izin Layar Mati & Background")
+                .setMessage("Agar kamera tetap streaming saat layar dimatikan atau saat membuka aplikasi lain, silakan aktifkan izin 'Tampilkan di Atas Aplikasi Lain'.")
+                .setPositiveButton("Buka Pengaturan") { _, _ ->
+                    try {
+                        val intent = Intent(
+                            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:$packageName")
+                        )
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                .setNegativeButton("Nanti Saja", null)
+                .show()
         }
     }
 
@@ -276,7 +318,7 @@ class MainActivity : AppCompatActivity() {
             binding.btnToggleServer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.danger))
             binding.btnToggleServer.setIconResource(R.drawable.ic_videocam_off)
 
-            // Start Foreground Service (dengan WakeLock & WifiLock)
+            // Start Foreground Service (dengan WakeLock, WifiLock, dan Overlay Window)
             WebcamService.startService(this, baseUrl)
 
             Toast.makeText(this, "Server aktif di $baseUrl", Toast.LENGTH_SHORT).show()

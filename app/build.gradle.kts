@@ -54,6 +54,9 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+    // Lifecycle Service for background processing
+    implementation("androidx.lifecycle:lifecycle-service:2.7.0")
+
     // Lightweight Embedded HTTP Server (NanoHTTPD)
     implementation("org.nanohttpd:nanohttpd:2.3.1")
 }
