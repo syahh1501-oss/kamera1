@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">IP Webcam Pro</string>
+    <string name="start_server">Start Server</string>
+    <string name="stop_server">Stop Server</string>
+    <string name="server_running">Server Running</string>
+    <string name="server_stopped">Server Stopped</string>
+    <string name="waiting_for_wifi">Hubungkan ke Wi-Fi / Hotspot</string>
+    <string name="camera_preview">Pratinjau Kamera</string>
+    <string name="stream_url_title">Stream URL</string>
+    <string name="opencv_url_title">OpenCV VideoCapture URL</string>
+    <string name="shot_url_title">Snapshot URL</string>
+    <string name="copied_to_clipboard">Disalin ke clipboard</string>
+    <string name="switch_camera">Ganti Kamera</string>
+    <string name="toggle_torch">Senter / Flash</string>
+    <string name="toggle_audio">Streaming Audio</string>
+    <string name="resolution">Resolusi</string>
+    <string name="quality">Kualitas JPEG</string>
+    <string name="fps">FPS</string>
+    <string name="clients_connected">Klien Terhubung</string>
+    <string name="permission_required">Izin Kamera dan Mikrofon Diperlukan</string>
+    <string name="permission_rationale">Aplikasi ini membutuhkan akses kamera untuk streaming video dan mikrofon untuk streaming audio.</string>
+</resources>
