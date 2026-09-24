@@ -57,8 +57,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.0
-          name: "IP Webcam Pro v1.0.0"
+          tag_name: v1.0.${{ github.run_number }}
+          name: "IP Webcam Pro v1.0.${{ github.run_number }}"
+          make_latest: true
           body: |
             ## 📱 Unduh & Pasang Langsung di HP Android
 
