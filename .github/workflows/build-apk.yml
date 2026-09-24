@@ -1,0 +1,87 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Build Debug APK
+        run: |
+          if [ -f gradlew ]; then
+            chmod +x gradlew
+            ./gradlew assembleDebug --stacktrace
+          else
+            gradle assembleDebug --stacktrace
+          fi
+
+      - name: Prepare APK
+        run: |
+          mkdir -p release_apk
+          cp app/build/outputs/apk/debug/*.apk release_apk/IPWebcam-Pro-debug.apk
+          echo "APK successfully built:"
+          ls -lh release_apk/
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: IPWebcam-Pro-debug
+          path: release_apk/IPWebcam-Pro-debug.apk
+          retention-days: 30
+
+      - name: Publish to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0
+          name: "IP Webcam Pro v1.0.0"
+          body: |
+            ## 📱 Unduh & Pasang Langsung di HP Android
+
+            Silakan unduh file **`IPWebcam-Pro-debug.apk`** di bawah ini langsung dari browser HP Anda:
+
+            - **Nama File**: `IPWebcam-Pro-debug.apk`
+            - **Target Android**: Android 7.0 (API 24) - Android 14 (API 34)
+            - **Fitur Utama**:
+              - MJPEG Stream (`/video`) untuk integrasi OpenCV / Python / Face Recognition
+              - Single Shot (`/shot.jpg`)
+              - Live Audio Streaming (`/audio`)
+              - Built-in Web Dashboard (`http://<ip>:8080`)
+              - Remote Control: Ganti kamera depan/belakang, flash senter, zoom, kualitas JPEG
+
+            ### Cara Install di HP Android:
+            1. Download file `IPWebcam-Pro-debug.apk`.
+            2. Buka file yang di-download pada HP.
+            3. Jika muncul peringatan keamanan *"Install unknown apps"*, aktifkan izin **Allow from this source**.
+            4. Jalankan aplikasi, izinkan izin **Kamera** dan **Mikrofon**, lalu tekan **START SERVER**.
+          files: release_apk/IPWebcam-Pro-debug.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
