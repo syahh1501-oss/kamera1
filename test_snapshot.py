@@ -16,7 +16,7 @@ def main():
     else:
         ip = input(f"Masukkan IP Android [{default_ip}]: ").strip() or default_ip
 
-    shot_url = f"http://{ip}:8080/shot.jpg"
+    shot_url = f"http://{ip}:50050/shot.jpg"
     print(f"[INFO] Mengambil foto snapshot dari {shot_url} ...")
 
     try:

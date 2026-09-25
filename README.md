@@ -6,10 +6,10 @@ Aplikasi Android Native untuk mengubah smartphone Android menjadi **IP Webcam Se
 
 ## 🌟 Fitur Utama
 
-- **MJPEG Streaming over HTTP (`/video`)**: Kompatibel 100% langsung dengan `cv2.VideoCapture("http://<IP>:8080/video")` tanpa perlu dependensi RTSP yang rumit.
+- **MJPEG Streaming over HTTP (`/video`)**: Kompatibel 100% langsung dengan `cv2.VideoCapture("http://<IP>:50050/video")` tanpa perlu dependensi RTSP yang rumit.
 - **Snapshot Foto Instan (`/shot.jpg`)**: Mengambil 1 frame foto JPEG beresolusi tinggi langsung melalui URL.
 - **Live Audio Streaming (`/audio`)**: Mengalirkan suara mikrofon HP secara real-time dalam format WAV/PCM ke PC atau browser.
-- **Modern Web Dashboard (`http://<IP>:8080`)**:
+- **Modern Web Dashboard (`http://<IP>:50050`)**:
   - UI Web responsif bertema Dark Mode dengan glassmorphism.
   - Pemutar video live dan audio live langsung di browser tanpa instalasi software tambahan.
   - Kontrol kamera jarak jauh: Ganti lensa depan/belakang, nyalakan senter (flash/torch), slider zoom digital, dan slider kualitas JPEG.
@@ -68,9 +68,9 @@ Android-IP-Webcam/
    - Pastikan HP Android dan Laptop/PC berada pada **jaringan Wi-Fi yang sama** (atau nyalakan **Hotspot Portabel** di HP dan sambungkan Laptop ke hotspot tersebut).
 2. **Jalankan Server**:
    - Tekan tombol hijau **START SERVER** di aplikasi.
-   - Layar akan menampilkan URL, misalnya: `http://192.168.1.15:8080`.
+   - Layar akan menampilkan URL, misalnya: `http://192.168.1.15:50050`.
 3. **Akses Dashboard dari Laptop**:
-   - Buka browser di PC/Laptop dan buka alamat `http://192.168.1.15:8080`.
+   - Buka browser di PC/Laptop dan buka alamat `http://192.168.1.15:50050`.
    - Anda dapat melihat tampilan kamera secara langsung dan mengatur senter/lensa/kualitas dari PC.
 
 ---
@@ -94,7 +94,7 @@ python test_opencv.py 192.168.1.15
 import cv2
 
 # Ganti dengan IP smartphone Anda
-URL = "http://192.168.1.15:8080/video"
+URL = "http://192.168.1.15:50050/video"
 
 cap = cv2.VideoCapture(URL)
 cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)  # Minimalisir latensi buffer
@@ -122,7 +122,7 @@ import urllib.request
 import numpy as np
 
 # Ambil 1 frame gambar resolusi penuh
-resp = urllib.request.urlopen("http://192.168.1.15:8080/shot.jpg")
+resp = urllib.request.urlopen("http://192.168.1.15:50050/shot.jpg")
 img_array = np.asarray(bytearray(resp.read()), dtype=np.uint8)
 img = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
 

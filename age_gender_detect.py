@@ -6,7 +6,7 @@ def main():
     # Menggunakan webcam laptop (0) atau bisa diganti dengan URL IP Webcam
     default_source = "0"
     print("=== Aplikasi Deteksi Usia dan Jenis Kelamin ===")
-    print("Masukkan '0' untuk webcam bawaan, atau masukkan URL stream IP Webcam (misal: http://192.168.1.15:8080/video)")
+    print("Masukkan '0' untuk webcam bawaan, atau masukkan URL stream IP Webcam (misal: http://192.168.1.15:50050/video)")
     
     source_input = input(f"Pilih sumber kamera [{default_source}]: ").strip()
     if not source_input:

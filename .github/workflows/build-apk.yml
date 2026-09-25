@@ -71,7 +71,7 @@ jobs:
               - MJPEG Stream (`/video`) untuk integrasi OpenCV / Python / Face Recognition
               - Single Shot (`/shot.jpg`)
               - Live Audio Streaming (`/audio`)
-              - Built-in Web Dashboard (`http://<ip>:8080`)
+              - Built-in Web Dashboard (`http://<ip>:50050`)
               - Remote Control: Ganti kamera depan/belakang, flash senter, zoom, kualitas JPEG
 
             ### Cara Install di HP Android:

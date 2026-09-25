@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
 class MjpegHttpServer(
-    port: Int = 8080,
+    port: Int = 50050,
     private val cameraManager: CameraStreamManager,
     private val audioStreamer: AudioStreamer,
     private val onControlAction: ((action: String, value: String) -> Unit)? = null
@@ -32,7 +32,7 @@ class MjpegHttpServer(
         return when {
             // Web Dashboard
             uri == "/" || uri == "/index.html" -> {
-                val html = getDashboardHtml(session.headers["host"] ?: "localhost:8080")
+                val html = getDashboardHtml(session.headers["host"] ?: "localhost:50050")
                 newFixedLengthResponse(Response.Status.OK, "text/html; charset=UTF-8", html)
             }
 

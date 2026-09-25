@@ -16,7 +16,7 @@ def main():
     else:
         ip = input(f"Masukkan IP Android [{default_ip}]: ").strip() or default_ip
 
-    stream_url = f"http://{ip}:8080/video"
+    stream_url = f"http://{ip}:50050/video"
     print(f"\n[INFO] Menghubungkan ke stream: {stream_url} ...")
 
     cap = cv2.VideoCapture(stream_url)
@@ -28,7 +28,7 @@ def main():
         print("Pastikan:")
         print("1. HP dan Laptop/PC berada di jaringan Wi-Fi / Hotspot yang sama.")
         print("2. Server di aplikasi Android IP Webcam sudah di-START.")
-        print("3. Coba buka http://{ip}:8080 di browser terlebih dahulu.")
+        print("3. Coba buka http://{ip}:50050 di browser terlebih dahulu.")
         return
 
     print("[SUCCESS] Terhubung ke IP Webcam! Tekan 'q' pada jendela video untuk keluar.\n")

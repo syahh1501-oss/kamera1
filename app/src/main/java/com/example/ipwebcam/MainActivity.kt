@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private var isServerRunning = false
     private var isAudioEnabled = true
-    private val port = 8080
+    private val port = 50050
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity() {
                 "SOLUSI TERBAIK:\n" +
                 "Nyalakan Hotspot Pribadi di HP ini, lalu sambungkan Laptop ke Hotspot HP tersebut.\n\n" +
                 "2. Windows Firewall di Laptop:\n" +
-                "Pastikan port 8080 tidak diblokir di Windows Defender Firewall pada Laptop."
+                "Pastikan port 50050 tidak diblokir di Windows Defender Firewall pada Laptop."
             )
             .setPositiveButton("Mengerti", null)
             .show()
